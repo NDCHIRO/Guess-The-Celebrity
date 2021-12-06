@@ -29,16 +29,16 @@ public class MainActivity extends AppCompatActivity {
     int randCelebrityURLAndName;
     Button btns[];
     ImageView myImage;
+    //button clicked
     public void selectAnswer(View view)
     {
         Button btn = (Button) view;
         if(btn.getText().equals(celebritiesNames.get(randCelebrityURLAndName)))
-        {
             Toast.makeText(MainActivity.this, "correct", Toast.LENGTH_SHORT).show();
-        }
         else
             Toast.makeText(MainActivity.this, "incorrect", Toast.LENGTH_SHORT).show();
 
+        //start loading the new image
         startAgain();
 
     }
@@ -59,14 +59,15 @@ public class MainActivity extends AppCompatActivity {
                     res += current;
                     data = reader.read();
                 }
-                //Log.i("info" , res);
+                //split the web content
                 splitStrings = res.split("<div class=\"listedArticles\">");
+                //search for the pattern to get the urls of the celebrities
                 Pattern p = Pattern.compile("<img src=\"(.*?)\"");
                 Matcher m = p.matcher(splitStrings[0]);
                 while (m.find()) {
                     celebritiesURLs.add(m.group(1));
                 }
-
+                //search for the pattern to get the names of the celebrities
                 p = Pattern.compile("alt=\"(.*?)\"");
                 m = p.matcher(splitStrings[0]);
 
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     celebritiesNames.add(m.group(1));
                 }
 
-                //unwanted data
+                //remove unwanted data
                 for (int i = 0; i < 4; i++) {
                     celebritiesNames.remove(0);
                     celebritiesURLs.remove(0);
@@ -96,10 +97,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     class DownloadImage extends AsyncTask<String , Void , Bitmap>
     {
-
+        //download image from the website
         @Override
         protected Bitmap doInBackground(String... urls) {
             try
